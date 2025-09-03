@@ -105,4 +105,6 @@ def logout(
 
 @router.get("/me")
 def read_current_user(user: User = Depends(get_current_user)):
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
     return {"id": user.id, "username": user.username}

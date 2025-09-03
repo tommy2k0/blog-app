@@ -7,3 +7,4 @@ python-multipart
 passlib[bcrypt]
 python-dotenv
 alembic
+psycopg2-binary

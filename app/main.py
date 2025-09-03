@@ -3,10 +3,12 @@
 # gunicorn -k uvicorn.workers.UvicornWorker main:app --workers 4 --bind 0.0.0.0:8000
 # docker build -t blog-app .
 # docker run -p 8000:8000 blog-app
+# docker run -p 8000:8000 -e DATABASE_URL=external_url blog-app
 
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import inspect
 from . import models
 from . import auth
 from . import comment
@@ -19,7 +21,12 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-models.Base.metadata.create_all(bind=engine)
+# Check if tables exist before creating them
+inspector = inspect(engine)
+if not inspector.has_table("users"):
+    models.Base.metadata.create_all(bind=engine)
+else:
+    print("Tables already exist. Skipping table creation.")
 
 app = FastAPI()
 

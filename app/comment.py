@@ -33,6 +33,9 @@ def create_comment_api(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     new_comment = Comment(**content.model_dump(), post_id=post_id, author_id=user.id)
     db.add(new_comment)
     db.commit()
@@ -47,6 +50,9 @@ def create_comment_html(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
     new_comment = create_comment_api(
         post_id=post_id, content=CommentCreate(content=content), user=user, db=db
     )
