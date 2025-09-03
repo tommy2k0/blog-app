@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1> Posts </h1>
+
+<ul>
+    {% for post in posts %}
+        <li>
+            <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+<form method="get" action="/posts/create">
+    <button type="submit">Create Post</button>
+</form>
+{% if current_user %}
+    <p>
+        <a href="/logout">Log out</a>
+    </p>
+{% else %}
+    <p>
+        <a href="/login">Log in</a> |
+        <a href="/signup">Sign up</a>
+    </p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Comment</h2>
+<p>By {{ comment.author.username }} on {{ comment.created_at }}</p>
+
+{% if current_user and comment.author_id == current_user.id %}
+    <form method="post" action="/comments/{{ comment.id }}/edit">
+        <textarea name="content" rows="3">{{ comment.content }}</textarea>
+        <button type="submit">Update</button>
+    </form>
+{% endif %}
+
+{% endblock %}
